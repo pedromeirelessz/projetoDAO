@@ -50,9 +50,9 @@ public class SellerDaoJDBC implements SellerDao {
 		try {
 			ps = conn.prepareStatement(
 					"SELECT seller.*,department.Name as DepName " 
-		            + "FROM seller INNER JOIN department "	
-		            + "ON seller.DepartmentId = department.Id " 
-		            + "WHERE seller.Id = ?");
+			        + "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id " 
+			        + "WHERE seller.Id = ?");
 
 			ps.setInt(1, id);
 			// Quando eu acabo de fazer uma consulta SQL e vem o resulto no ResultSet, esse
@@ -65,17 +65,9 @@ public class SellerDaoJDBC implements SellerDao {
 				// dados do banco de dados relacional e transforma em objetos associados, então
 				// irei criar um objeto seller com os dados do vendedor e associado a ele vai
 				// ter outro objeto do tipo department com os dados do departamento dele.
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
+				Department dep = instantiateDepartment(rs);
 
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setDepartment(dep);
+				Seller obj = instantiateSeller(rs, dep);
 				return obj;
 			} else {
 				return null;
@@ -86,6 +78,24 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeStatement(ps);
 			DB.closeResultSet(rs);
 		}
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setDepartment(dep);
+		return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
 	}
 
 	@Override
