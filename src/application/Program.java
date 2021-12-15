@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,19 +16,30 @@ public class Program {
 		Scanner sc = new Scanner(System.in);
 
 		SellerDao sellerDao = DaoFactory.createSellerDao();
+		Seller seller = new Seller();
+		Department dep = new Department();
+		List<Seller> list = new ArrayList<>();
 
-		System.out.println("=== TESTE 1: seller findById ===");
-		Seller seller = sellerDao.findById(3);
+		System.out.println();
+		System.out.println("=== TEST 1: seller findById ===");
+		System.out.print("id: ");
+		int id = sc.nextInt();
+		seller = sellerDao.findById(id);
 		System.out.println(seller);
 
-		System.out.println("=== TESTE 2: seller findByDepartment ===");
-		System.out.print("What is id?: ");
-		int id = sc.nextInt();
-
-		Department dep = new Department(id, null);
-		List<Seller> list = sellerDao.findByDepartment(dep);
+		System.out.println();
+		System.out.println("=== TEST 2: seller findByDepartment ===");
+		System.out.print("id: ");
+		id = sc.nextInt();
+		dep = new Department(id, null);
+		list = sellerDao.findByDepartment(dep);
 		list.forEach(System.out::println);
-		
+
+		System.out.println();
+		System.out.println("=== TEST 3: seller findaAll ===");
+		list = sellerDao.findAll();
+		list.forEach(System.out::println);
+
 		sc.close();
 	}
 }
