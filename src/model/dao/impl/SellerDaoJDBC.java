@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DbException;
@@ -49,7 +52,7 @@ public class SellerDaoJDBC implements SellerDao {
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(
-					"SELECT seller.*,department.Name as DepName " 
+					"SELECT seller.*,department.Name as DepName "
 			        + "FROM seller INNER JOIN department "
 					+ "ON seller.DepartmentId = department.Id " 
 			        + "WHERE seller.Id = ?");
@@ -102,5 +105,51 @@ public class SellerDaoJDBC implements SellerDao {
 	public List<Seller> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Seller> findByDepartment(Department department) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement(
+					"SELECT seller.*,department.Name as DepName " 
+			        + "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+			        + "WHERE DepartmentId = ? " 
+					+ "ORDER BY Name");
+
+			// Pegando o id do departamento
+			ps.setInt(1, department.getId());
+
+			rs = ps.executeQuery();
+
+			List<Seller> list = new ArrayList<>();
+			// Vou guardar dentro desse map qualquer departamento que eu instanciar
+			Map<Integer, Department> map = new HashMap<>();
+			// Nesse irei usar um while pois o ResultSet pode retornar mais de 1 resultado
+			while (rs.next()) {
+
+				// Toda vez que passar no while, irei verificar se o departamento já foi
+				// instanciado, eu uso a operação get do map verificar se já foi instanciado um
+				// departamento com esse id, se não exitir o map irá retornar null, então irei
+				// instanciar ele.
+				Department dep = map.get(rs.getInt("DepartmentId"));
+				if (dep == null) {
+					dep = instantiateDepartment(rs);
+					// Vou salvar o departamento dentro do meu map, para que no proximo o if possa
+					// ser verificado que ele já foi instanciado com essa chave
+					map.put(rs.getInt("DepartmentId"), dep);
+				}
+				Seller obj = instantiateSeller(rs, dep);
+				list.add(obj);
+			}
+			return list;
+		} catch (SQLException DB) {
+			throw new DbException(DB.getMessage());
+		} finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+		}
 	}
 }
