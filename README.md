@@ -31,3 +31,41 @@ WHERE seller.Id = ?
 
 ![ModeloDAO3](https://user-images.githubusercontent.com/81655895/146043744-88991442-c203-4a79-9231-be331e5e64ca.PNG)
 
+
+
+## Reusing instantiation
+```Java
+
+private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+        Seller obj = new Seller();
+        obj.setId(rs.getInt("Id"));
+        obj.setName(rs.getString("Name"));
+        obj.setEmail(rs.getString("Email"));
+        obj.setBaseSalary(rs.getDouble("BaseSalary"));
+        obj.setBirthDate(rs.getDate("BirthDate"));
+        obj.setDepartment(dep);
+        return obj;
+}
+
+```
+```Java
+private Department instantiateDepartment(ResultSet rs) throws SQLException {
+        Department dep = new Department();
+        dep.setId(rs.getInt("DepartmentId"));
+        dep.setName(rs.getString("DepName"));
+        return dep;
+}
+
+```
+
+## findByDepartment implementation
+
+### SQL Query:
+SELECT seller.*,department.Name as DepName<br>
+FROM seller INNER JOIN department<br>
+ON seller.DepartmentId = department.Id<br>
+WHERE DepartmentId = ?<br><br>
+ORDER BY Name
+
+![ModeloDAO3](https://user-images.githubusercontent.com/81655895/146099788-75adebe5-354f-416a-a5d0-9027f8a60698.PNG)
+
