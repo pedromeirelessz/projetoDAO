@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -39,7 +40,13 @@ public class Program {
 		System.out.println("=== TEST 3: seller findaAll ===");
 		list = sellerDao.findAll();
 		list.forEach(System.out::println);
+		
+		System.out.println();
+		System.out.println("=== TEST 4: seller findaAll ===");
+		Seller newSeller = new Seller(null, "Pedro", "ph@gmail.com", new Date(), 4000.0, dep);
+		sellerDao.insert(newSeller);
+		System.out.println("Inserted! New id: " + newSeller.getId());
 
 		sc.close();
-	}
+	} 
 }
