@@ -23,7 +23,7 @@ public class Program {
 
 		System.out.println();
 		System.out.println("=== TEST 1: seller findById ===");
-		System.out.print("id: ");
+		System.out.print("Department id: ");
 		int id = sc.nextInt();
 		seller = sellerDao.findById(id);
 		System.out.println(seller);
@@ -40,13 +40,13 @@ public class Program {
 		System.out.println("=== TEST 3: seller findaAll ===");
 		list = sellerDao.findAll();
 		list.forEach(System.out::println);
-		
+
 		System.out.println();
 		System.out.println("=== TEST 4: seller insert ===");
 		Seller newSeller = new Seller(null, "Pedro", "ph@gmail.com", new Date(), 4000.0, dep);
 		sellerDao.insert(newSeller);
 		System.out.println("Inserted! New id: " + newSeller.getId());
-		
+
 		System.out.println();
 		System.out.println("=== TEST 5: seller update ===");
 		seller = sellerDao.findById(1);
@@ -54,6 +54,13 @@ public class Program {
 		sellerDao.update(seller);
 		System.out.println("Update complete");
 
+		System.out.println();
+		System.out.println("=== TEST 6: seller delete ===");
+		System.out.print("Enter id for delete: ");
+		id = sc.nextInt();
+		sellerDao.deleteById(id);
+		System.out.println("Delete completed");
+
 		sc.close();
-	} 
+	}
 }
