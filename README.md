@@ -1,5 +1,7 @@
 # Padrão de projeto DAO (Data Acess Object)
 
+[![LICENSE](https://img.shields.io/npm/l/react)](https://github.com/phmeyreles/projetoDAO/blob/master/LICENSE) 
+
 ## Ideia geral do padrão DAO
 * Para cada entidade, haverá um objeto responsável por fazer o acesso a dados relacionado a esta entidade. Por exemplo:
   * Cliente: ClienteDAO
@@ -64,8 +66,46 @@ private Department instantiateDepartment(ResultSet rs) throws SQLException {
 SELECT seller.*,department.Name as DepName<br>
 FROM seller INNER JOIN department<br>
 ON seller.DepartmentId = department.Id<br>
-WHERE DepartmentId = ?<br><br>
+WHERE DepartmentId = ?<br>
 ORDER BY Name
 
 ![ModeloDAO3](https://user-images.githubusercontent.com/81655895/146099788-75adebe5-354f-416a-a5d0-9027f8a60698.PNG)
 
+## findAll implementation
+
+### SQL Query:
+SELECT seller.*,department.Name as DepName<br>
+FROM seller INNER JOIN department<br>
+ON seller.DepartmentId = department.Id<br>
+ORDER BY Name
+
+## insert implementation
+
+### SQL Query:
+INSERT INTO seller<br>
+(Name, Email, BirthDate, BaseSalary, DepartmentId)<br>
+VALUES<br>
+(?, ?, ?, ?, ?)
+
+## update implementation
+
+### SQL Query:
+UPDATE seller<br>
+SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ?<br>
+WHERE Id = ?
+
+## delete implementation
+
+### SQL Query:
+DELETE FROM seller<br>
+WHERE Id = ?
+
+## DepartmentDao implementation and test
+### Checklist:
+* DepartmentDaoJDBC
+* DaoFactory
+* Program2
+
+## Artigos relacionados
+* [https://www.devmedia.com.br/dao-pattern-persistencia-de-dados-utilizando-o-padrao-dao/30999](https://www.devmedia.com.br/dao-pattern-persistencia-de-dados-utilizando-o-padrao-dao/30999 "Artigo relacionado")
+* [https://www.oracle.com/java/technologies/dataaccessobject.html](https://www.oracle.com/java/technologies/dataaccessobject.html "Artigo relacionado")
